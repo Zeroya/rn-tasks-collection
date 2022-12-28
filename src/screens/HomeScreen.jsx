@@ -1,14 +1,14 @@
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { taskItems } from "../mockedData/mockedData";
 import Header from "../components/Header";
 import Item from "../components/Item";
 
 export default function HomeScreen({ navigation }) {
-  const taskItems = ["Read docs", "go outside", "prepare homework", "pass a diploma", "rewrite task styles "];
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
-      <Image style={styles.tinyLogo} source={require("../assets/iconReenbit2.png")} />
+      <Image style={styles.tinyLogo} source={require("../../assets/iconReenbit2.png")} />
       <ScrollView style={styles.list}>
         <Text style={styles.list__title}>My List</Text>
         <View style={styles.list__items}>
