@@ -1,12 +1,12 @@
-import React from "react";
+import * as React from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, StyleSheet } from "react-native";
-import MainContainer from "./screens/MainContainer";
-import LoginScreen from "./screens/LoginScreen";
+import MainContainer from "./src/screens/MainContainer";
+import LoginScreen from "./src/screens/LoginScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider } from "react-redux";
-import { store } from "./store/store";
+import { store } from "./src/store/store";
 
 const Stack = createNativeStackNavigator();
 

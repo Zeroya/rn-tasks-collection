@@ -62,14 +62,7 @@ export default function TimerScreen({ navigation, route }) {
             setPlayPermission(!playPermission)
           }
         }
-          style={{
-               width:"93%",
-               height:'93%',
-               backgroundColor: !playPermission ? '#808781' : !bgConnect ? '#8C3913' : '#0C3913',
-               borderWidth: 2,
-               borderColor: 'rgba(11, 2, 7, 0.2)',
-               borderRadius: 100,
-             }}>
+          style={[styles.button, {backgroundColor: !playPermission ? '#808781' : !bgConnect ? '#8C3913' : '#0C3913'} ]}>
                <View style={{flex:1,justifyContent: "center",alignItems: "center"}}>
               <Text adjustsFontSizeToFit={true} style={{textAlignVertical: "center", textAlign: "center"}}>{children({remainingTime})}</Text>
               </View>
@@ -92,5 +85,12 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:"center",
     alignItems:"center",
-  }
+  },
+  button:{
+    width:"93%",
+    height:'93%',
+    borderWidth: 2,
+    borderColor: 'rgba(11, 2, 7, 0.2)',
+    borderRadius: 100,
+  },
 });

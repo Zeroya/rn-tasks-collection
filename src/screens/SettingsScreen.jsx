@@ -1,4 +1,4 @@
-import  React, {useState, useEffect} from 'react';
+import  React, {useState} from 'react';
 import { Button } from '@rneui/themed';
 import { ScrollView , StyleSheet, View} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
