@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { View, StyleSheet } from "react-native";
 import MainContainer from "./src/screens/MainContainer";
 import LoginScreen from "./src/screens/LoginScreen";
+import MapScreen from "./src/screens/MapScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider } from "react-redux";
@@ -18,6 +19,7 @@ export default function App() {
           <Stack.Navigator>
             <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
             <Stack.Screen options={{ headerShown: false }} name="User" component={MainContainer} />
+            <Stack.Screen name="Map" component={MapScreen} />
           </Stack.Navigator>
         </NavigationContainer>
         <StatusBar theme="auto" />
