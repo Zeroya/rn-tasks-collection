@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 const Item = (props) => {
   return (
@@ -22,18 +22,17 @@ const styles = StyleSheet.create({
   item__Bar: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     flexWrap: "wrap",
   },
   item__text: {
     maxWidth: "95%",
   },
-  item__header:{
-    fontSize:20,
-    paddingBottom:5,
-    fontWeight:'600',
-    
-  }
+  item__header: {
+    fontSize: 20,
+    paddingBottom: 5,
+    fontWeight: "600",
+  },
 });
 
 export default Item;

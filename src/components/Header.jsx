@@ -1,24 +1,24 @@
-import React from 'react'
-import { StyleSheet } from 'react-native';
-import { Button } from '@rneui/themed';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { Button } from "@rneui/themed";
 
 const Header = ({ navigation: { navigate } }) => {
   return (
     <Button
-      onPress={() => navigate('Login')}
+      onPress={() => navigate("Login")}
       title="LOG OUT"
-        buttonStyle={styles.buttonStyle}
-        containerStyle={styles.containerStyle}
-          titleStyle={{ fontWeight: 'bold' }}
-        />
-  )
-}
+      buttonStyle={styles.buttonStyle}
+      containerStyle={styles.containerStyle}
+      titleStyle={{ fontWeight: "bold" }}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    backgroundColor: 'rgba(11, 2, 7, 0.8)',
+    backgroundColor: "rgba(11, 2, 7, 0.8)",
     borderWidth: 2,
-    borderColor: 'rgba(11, 2, 7, 0.2)',
+    borderColor: "rgba(11, 2, 7, 0.2)",
     borderRadius: 30,
   },
   containerStyle: {
@@ -29,5 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header
-
+export default Header;
