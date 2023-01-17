@@ -2,6 +2,7 @@
   "expo": {
     "name": "react-native-list",
     "slug": "react-native-list",
+    "scheme": "come.withzeroya.react-native-list",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,9 +19,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIndentidier":"come.withzeroya.react-native-list"
+
     },
     "android": {
+      "package":"come.withzeroya.react-native-list",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
