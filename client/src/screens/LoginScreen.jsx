@@ -3,8 +3,7 @@ import { View, TextInput, StyleSheet, TouchableOpacity, Text, Alert, Button } fr
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
-import { makeRedirectUri, ResponseType } from "expo-auth-session";
-import Constants from "expo-constants";
+import { BASE_URL } from "../constants/constants";
 import { SocialIcon } from "react-native-elements";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -39,7 +38,33 @@ const LoginScreen = ({ navigation }) => {
     // { useProxy: true }
   );
 
-  const onLoginPressed = () => {
+  const loginApiCall = async (url, body) => {
+    const res = await fetch(url, {
+      method: "POST",
+      withCredentials: true,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    const status = res.status;
+    const data = await res.json();
+
+    if (status !== 400) {
+      setName("");
+      setPassword("");
+      navigation.navigate("User");
+      console.log(data);
+    } else {
+      setName("");
+      setPassword("");
+      Alert.alert(data.msg);
+    }
+  };
+
+  const onLoginPressed = async () => {
     if (!name.trim() && !password.trim()) {
       Alert.alert("Please enter username and password");
     } else if (!name.trim() && password.trim()) {
@@ -47,9 +72,10 @@ const LoginScreen = ({ navigation }) => {
     } else if (name.trim() && !password.trim()) {
       Alert.alert("Please enter password ");
     } else {
-      setName("");
-      setPassword("");
-      navigation.navigate("User");
+      await loginApiCall(BASE_URL + "/auth/login", {
+        userName: name,
+        password: password,
+      });
     }
   };
 
@@ -93,6 +119,10 @@ const LoginScreen = ({ navigation }) => {
         Alert.alert(`Logged in, hi ${userName}`);
         setAuth(response.authentication);
         navigation.navigate("User");
+        // loginApiCall("http://192.168.0.108:3004/auth/login", {
+        //   userName,
+        //   password: "Google",
+        // });
       } else {
         Alert.alert(`Error with login!`);
       }
@@ -117,6 +147,10 @@ const LoginScreen = ({ navigation }) => {
         Alert.alert(`Logged in, hi ${userName}`);
         setAuth(response.authentication);
         navigation.navigate("User");
+        // await loginApiCall("http://192.168.0.108:3004/auth/login", {
+        //   userName,
+        //   password: "Facebook",
+        // });
       } else {
         Alert.alert(`Error with login!`);
       }
@@ -125,19 +159,20 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  console.log("gggoogggooggoggoddddddd", userInfo);
+  console.log("<-----------", userInfo);
 
   return (
     <View style={styles.login}>
       <TextInput
-        placeholder={"Enter the user Name"}
+        placeholder={"Enter user Name"}
         onChangeText={(name) => setName(name)}
         value={name}
         style={styles.login__input}
       />
       <TextInput
-        placeholder={"Enter the password"}
+        placeholder={"Enter password"}
         onChangeText={(password) => setPassword(password)}
+        secureTextEntry={true}
         value={password}
         style={styles.login__input}
       />
@@ -145,6 +180,9 @@ const LoginScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.button__form} onPress={onLoginPressed}>
           <Text>Login</Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.relocateBlockStyle}>
+        <Text onPress={() => navigation.navigate("Register")}>New Here ? Register</Text>
       </View>
       <View style={styles.media__container}>
         <View style={styles.orBlock}>
@@ -175,7 +213,7 @@ const styles = StyleSheet.create({
   login: {
     width: "100%",
     height: "100%",
-    marginTop: 60,
+    marginTop: 55,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(65, 237, 17, 0.08)",
@@ -188,7 +226,7 @@ const styles = StyleSheet.create({
     marginTop: "2%",
   },
   button__container: {
-    marginTop: "10%",
+    marginTop: "7%",
     width: "80%",
   },
   button__form: {
@@ -202,7 +240,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   media__container: {
-    paddingTop: 20,
+    paddingTop: 10,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -213,9 +251,14 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 78, 0, 0.8)",
     borderRadius: 15,
     alignItems: "center",
+    borderColor: "black",
+    borderWidth: 1,
   },
   button__media: {
     padding: 25,
     marginTop: 15,
+  },
+  relocateBlockStyle: {
+    marginTop: 10,
   },
 });
