@@ -4,6 +4,7 @@ import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import { BASE_URL } from "../constants/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SocialIcon } from "react-native-elements";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -53,6 +54,7 @@ const LoginScreen = ({ navigation }) => {
     const data = await res.json();
 
     if (status !== 400) {
+      await AsyncStorage.setItem("username", name);
       setName("");
       setPassword("");
       navigation.navigate("User");
