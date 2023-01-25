@@ -6,12 +6,14 @@ import DetailsScreen from "./DetailsScreen";
 import SettingsScreen from "./SettingsScreen";
 import TimerScreen from "./TimerScreen";
 import QrScanner from "./QrScanner";
+import ChatScreen from "./ChatScreen";
 
 const homeName = "Home";
 const detailsName = "Details";
 const settingsName = "Settings";
 const timersName = "Timer";
 const scannerName = "QrScanner";
+const chatName = "Chat";
 
 const Tab = createBottomTabNavigator();
 
@@ -37,6 +39,8 @@ function MainContainer() {
               iconName = focused ? "caret-forward-circle" : "caret-forward-circle-outline";
             } else if (rn === scannerName) {
               iconName = focused ? "md-qr-code-outline" : "md-qr-code-sharp";
+            } else if (rn === chatName) {
+              iconName = focused ? "chatbubbles" : "chatbubbles";
             } else if (rn === settingsName) {
               iconName = focused ? "settings" : "settings-outline";
             }
@@ -49,6 +53,7 @@ function MainContainer() {
         <Tab.Screen options={{ headerShown: false }} name={detailsName} component={DetailsScreen} />
         <Tab.Screen options={{ headerShown: false }} name={timersName} component={TimerScreen} />
         <Tab.Screen options={{ headerShown: false }} name={scannerName} component={QrScanner} />
+        <Tab.Screen options={{ headerShown: false }} name={chatName} component={ChatScreen} />
         <Tab.Screen name={settingsName} component={SettingsScreen} />
       </Tab.Navigator>
     </>

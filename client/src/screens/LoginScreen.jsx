@@ -4,6 +4,7 @@ import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import * as Facebook from "expo-auth-session/providers/facebook";
 import { BASE_URL } from "../constants/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SocialIcon } from "react-native-elements";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -53,6 +54,7 @@ const LoginScreen = ({ navigation }) => {
     const data = await res.json();
 
     if (status !== 400) {
+      await AsyncStorage.setItem("username", name);
       setName("");
       setPassword("");
       navigation.navigate("User");
@@ -79,28 +81,6 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(gResponse);
-  //   if (gResponse?.type === "success") {
-  //     setAuth(gResponse.authentication);
-  //     auth && getUserGoogleData();
-  //     navigation.navigate("User");
-  //     // Alert.alert(`Logged in, hi ${userInfo.name}`);
-  //   }
-  // }, [gResponse]);
-
-  // useEffect(() => {
-  //   console.log(fbResponse);
-  //   if (fbResponse?.type === "success") {
-  //     // const { code } = fbResponse.params;
-  //     // setAuth(code);
-  //     setAuth(fbResponse.authentication);
-  //     auth && getUserFacebookData();
-  //     navigation.navigate("User");
-  //     //  Alert.alert(`Logged in, hi ${userInfo.name} `);
-  //   }
-  // }, [fbResponse]);
-
   const getUserGoogleData = async () => {
     try {
       const response = await gPromptAsync();
@@ -115,6 +95,7 @@ const LoginScreen = ({ navigation }) => {
           console.log(data);
           setUserInfo(data);
           userName = data.name;
+          AsyncStorage.setItem("username", userName);
         });
         Alert.alert(`Logged in, hi ${userName}`);
         setAuth(response.authentication);
@@ -143,6 +124,7 @@ const LoginScreen = ({ navigation }) => {
           console.log(data);
           setUserInfo(data);
           userName = data.name;
+          AsyncStorage.setItem("username", userName);
         });
         Alert.alert(`Logged in, hi ${userName}`);
         setAuth(response.authentication);
