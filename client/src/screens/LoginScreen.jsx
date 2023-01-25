@@ -81,28 +81,6 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(gResponse);
-  //   if (gResponse?.type === "success") {
-  //     setAuth(gResponse.authentication);
-  //     auth && getUserGoogleData();
-  //     navigation.navigate("User");
-  //     // Alert.alert(`Logged in, hi ${userInfo.name}`);
-  //   }
-  // }, [gResponse]);
-
-  // useEffect(() => {
-  //   console.log(fbResponse);
-  //   if (fbResponse?.type === "success") {
-  //     // const { code } = fbResponse.params;
-  //     // setAuth(code);
-  //     setAuth(fbResponse.authentication);
-  //     auth && getUserFacebookData();
-  //     navigation.navigate("User");
-  //     //  Alert.alert(`Logged in, hi ${userInfo.name} `);
-  //   }
-  // }, [fbResponse]);
-
   const getUserGoogleData = async () => {
     try {
       const response = await gPromptAsync();
@@ -117,6 +95,7 @@ const LoginScreen = ({ navigation }) => {
           console.log(data);
           setUserInfo(data);
           userName = data.name;
+          AsyncStorage.setItem("username", userName);
         });
         Alert.alert(`Logged in, hi ${userName}`);
         setAuth(response.authentication);
@@ -145,6 +124,7 @@ const LoginScreen = ({ navigation }) => {
           console.log(data);
           setUserInfo(data);
           userName = data.name;
+          AsyncStorage.setItem("username", userName);
         });
         Alert.alert(`Logged in, hi ${userName}`);
         setAuth(response.authentication);

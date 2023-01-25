@@ -10,10 +10,8 @@ const MessagingScreen = ({ route, navigation }) => {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState("");
 
-  //👇🏻 Access the chatroom's name and id
   const { name, id } = route.params;
 
-  //👇🏻 This function gets the username saved on AsyncStorage
   const getUsername = async () => {
     try {
       const value = await AsyncStorage.getItem("username");
@@ -25,7 +23,6 @@ const MessagingScreen = ({ route, navigation }) => {
     }
   };
 
-  //👇🏻 Sets the header title to the name chatroom's name
   useLayoutEffect(() => {
     navigation.setOptions({ title: name });
     getUsername();
@@ -33,18 +30,13 @@ const MessagingScreen = ({ route, navigation }) => {
     socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
   }, []);
 
-  //👇🏻 This runs when the messages are updated.
   useEffect(() => {
+    socket.emit("findRoom", id);
     socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
-  }, [socket]);
+  }, [socket, chatMessages]);
 
-  /*👇🏻 
-        This function gets the time the user sends a message, then 
-        logs the username, message, and the timestamp to the console.
-     */
   const handleNewMessage = () => {
     const hour = new Date().getHours() < 10 ? `0${new Date().getHours()}` : `${new Date().getHours()}`;
-
     const mins = new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : `${new Date().getMinutes()}`;
 
     socket.emit("newMessage", {
@@ -53,6 +45,7 @@ const MessagingScreen = ({ route, navigation }) => {
       user,
       timestamp: { hour, mins },
     });
+    setMessage("");
   };
 
   return (
@@ -70,7 +63,7 @@ const MessagingScreen = ({ route, navigation }) => {
       </View>
 
       <View style={styles.messaginginputContainer}>
-        <TextInput style={styles.messaginginput} onChangeText={(value) => setMessage(value)} />
+        <TextInput style={styles.messaginginput} value={message} onChangeText={(value) => setMessage(value)} />
         <Pressable style={styles.messagingbuttonContainer} onPress={handleNewMessage}>
           <View>
             <Text style={{ color: "#f2f0f1", fontSize: 20 }}>SEND</Text>

@@ -10,8 +10,9 @@ export default function MessageComponent({ item, user }) {
     <View>
       <View style={status ? styles.mmessageWrapper : [styles.mmessageWrapper, { alignItems: "flex-end" }]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Ionicons name="person-circle-outline" size={30} color="black" style={styles.mavatar} />
+          <Ionicons name="person-circle-outline" size={30} color="green" style={styles.mavatar} />
           <View style={status ? styles.mmessage : [styles.mmessage, { backgroundColor: "rgb(194, 243, 194)" }]}>
+            <Text style={styles.messageUserName}>{item.user}</Text>
             <Text>{item.text}</Text>
           </View>
         </View>

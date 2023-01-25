@@ -20,14 +20,13 @@ const Chat = () => {
         .catch((err) => console.error(err));
     }
     fetchGroups();
-  }, []);
+  }, [rooms]);
 
-  //👇🏻 Runs whenever there is new trigger from the backend
   useEffect(() => {
     socket.on("roomsList", (rooms) => {
       setRooms(rooms);
     });
-  }, [socket]);
+  }, [socket, rooms]);
 
   return (
     <SafeAreaView style={styles.chatscreen}>

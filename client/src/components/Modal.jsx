@@ -6,12 +6,9 @@ import socket from "../utils/socket";
 const Modal = ({ setVisible }) => {
   const [groupName, setGroupName] = useState("");
 
-  //👇🏻 Function that closes the Modal component
   const closeModal = () => setVisible(false);
 
-  //👇🏻 Logs the group name to the console
   const handleCreateRoom = () => {
-    //👇🏻 sends a message containing the group name to the server
     socket.emit("createRoom", groupName);
     closeModal();
   };

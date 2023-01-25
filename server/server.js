@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: ["http://localhost:19000", "http://192.168.0.106:19000/auth/login"] },
+  cors: { origin: ["http://localhost:19000", "http://192.168.0.105:19000/auth/login"] },
 });
 // const server = http.Server(app);
 // const io = socketIo(server);
@@ -48,7 +48,6 @@ io.on("connection", (socket) => {
     socket.to(result[0].name).emit("roomMessage", newMessage);
     result[0].messages.push(newMessage);
 
-    //👇🏻 Trigger the events to reflect the new changes
     socket.emit("roomsList", chatRooms);
     socket.emit("foundRoom", result[0].messages);
   });
@@ -74,7 +73,7 @@ app.get("/api", (req, res) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: ["http://localhost:19000", "http://192.168.0.106:19000/auth/login"] }));
+app.use(cors({ credentials: true, origin: ["http://localhost:19000", "http://192.168.0.105:19000/auth/login"] }));
 app.use("/auth", userRoutes);
 
 mongoose
