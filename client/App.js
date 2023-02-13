@@ -1,4 +1,5 @@
 import * as React from "react";
+import "expo-dev-client";
 import { StatusBar } from "expo-status-bar";
 import { View, StyleSheet } from "react-native";
 import MainContainer from "./src/screens/MainContainer";
@@ -6,8 +7,10 @@ import LoginScreen from "./src/screens/LoginScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import MapScreen from "./src/screens/MapScreen";
 import MessagingScreen from "./src/screens/MessagingScreen";
+import VideoCallScreen from "./src/screens/VideoCallScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import UserProfileScreen from "./src/screens/UserProfileScreen";
 import { Provider } from "react-redux";
 import { store } from "./src/store/store";
 
@@ -22,6 +25,8 @@ export default function App() {
             <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
             <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
             <Stack.Screen options={{ headerShown: false }} name="User" component={MainContainer} />
+            <Stack.Screen name="UserProfile" component={UserProfileScreen} />
+            <Stack.Screen name="VideoCall" component={VideoCallScreen} />
             <Stack.Screen name="Messaging" component={MessagingScreen} />
             <Stack.Screen name="Map" component={MapScreen} />
           </Stack.Navigator>

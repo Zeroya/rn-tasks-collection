@@ -2,8 +2,8 @@
   "expo": {
     "name": "react-native-list",
     "slug": "react-native-list",
-    "scheme": "come.withzeroya.react-native-list",
-    "version": "1.0.0",
+    "scheme": "come.mywithzeroya.reactnativelist",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,11 +20,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIndentidier":"come.withzeroya.react-native-list"
-
+      "bundleIndentidier": "come.withzeroya1.reactnativelist"
     },
     "android": {
-      "package":"come.withzeroya.react-native-list",
+      "package": "come.withzeroya2.reactnativelist",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -32,6 +31,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2b6f28ae-b439-4292-9f98-cbf7a41bf6c4"
+      }
     }
   }
 }
