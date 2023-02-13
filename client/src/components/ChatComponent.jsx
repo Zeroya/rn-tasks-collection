@@ -26,7 +26,6 @@ const ChatComponent = ({ item }) => {
       <View style={styles.crightContainer}>
         <View>
           <Text style={styles.cusername}>{item.name}</Text>
-
           <Text style={styles.cmessage}>{messages?.text ? messages.text : "Tap to start chatting"}</Text>
         </View>
         <View>

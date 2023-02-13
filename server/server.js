@@ -20,6 +20,7 @@ const io = new Server(httpServer, {
 
 const generateID = () => Math.random().toString(36).substring(2, 10);
 let chatRooms = [];
+let callInfo = { callName: "", checker: false };
 
 io.on("connection", (socket) => {
   console.log("Connection established");
@@ -30,6 +31,14 @@ io.on("connection", (socket) => {
     chatRooms.unshift({ id: generateID(), name: roomName, messages: [] });
     socket.emit("roomsList", chatRooms);
   });
+
+  socket.on("callUserInfo", (info) => {
+    callInfo.callName = info.callName;
+    callInfo.checker = info.checker;
+    socket.broadcast.emit("getUserInfo", callInfo);
+  });
+
+  // socket.broadcast.emit("getUserInfo", callInfo);
 
   socket.on("findRoom", (id) => {
     let result = chatRooms.filter((room) => room.id == id);
