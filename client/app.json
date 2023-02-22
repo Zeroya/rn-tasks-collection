@@ -24,6 +24,7 @@
     },
     "android": {
       "package": "come.withzeroya2.reactnativelist",
+      "googleServicesFile": "./android/app/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
