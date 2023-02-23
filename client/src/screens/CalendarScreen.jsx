@@ -25,15 +25,17 @@ const CalendarScreen = () => {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [items, setItems] = useState({});
+  const todayDate = new Date().toISOString().slice(0, 10);
   const [testItems, setTestItems] = useState({
-    "2022-07-11": [{ name: "heeiii 1111", time: "10:00 - 13:00" }],
-    "2022-07-12": [],
-    "2022-07-13": [],
-    "2022-07-21": [{ name: "heeiii 2211", time: "15:00 - 17:00" }],
-    "2022-07-15": [
-      { name: "heeiii 3311", time: "8:00 - 10:00" },
-      { name: "heeiii 3331", time: "12:00 - 14:00" },
-      { name: "heeiii 3331", time: "18:00 - 22:00" },
+    "2023-02-11": [{ name: "heeiii 1111", time: "10:00 - 13:00", notificationScheduled: false, eventNotified: false }],
+    "2023-02-12": [],
+    "2023-02-13": [],
+    "2023-02-21": [{ name: "heeiii 2211", time: "15:00 - 17:00", notificationScheduled: false, eventNotified: false }],
+    "2023-02-23": [],
+    "2023-02-25": [
+      { name: "heeiii 3311", time: "8:00 - 10:00", notificationScheduled: false, eventNotified: false },
+      { name: "heeiii 3331", time: "12:00 - 14:00", notificationScheduled: false, eventNotified: false },
+      { name: "heeiii 3331", time: "18:00 - 22:00", notificationScheduled: false, eventNotified: false },
     ],
   });
 
@@ -43,6 +45,7 @@ const CalendarScreen = () => {
   const responseListener = useRef();
 
   useEffect(() => {
+    loadItems({ dateString: "2023-02-22", day: 22, month: 2, timestamp: 1677024000000, year: 2023 });
     registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
 
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
@@ -58,6 +61,94 @@ const CalendarScreen = () => {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+
+  const timerRef = useRef(null);
+  const [notificationScheduled, setNotificationScheduled] = useState(false);
+  const [eventNotified, setEventNotified] = useState(false);
+
+  useEffect(() => {
+    const checkNotifications = () => {
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "0")}-${today
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
+
+      const todayEvents = testItems[todayStr] || [];
+
+      todayEvents.forEach((event) => {
+        const [startTimeStr, endTimeStr] = event.time.split(" - ");
+        const [startHour, startMinute] = startTimeStr.split(":").map(Number);
+
+        const notificationTime = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          startHour,
+          startMinute - 10,
+          0
+        );
+        const eventStartTime = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          startHour,
+          startMinute,
+          0
+        );
+
+        //     if (!notificationScheduled && today.getTime() < eventStartTime.getTime() - 10 * 60 * 1000) {
+        //       // Schedule notification for 10 minutes before the event
+        //       clearTimeout(timerRef.current);
+        //       timerRef.current = setTimeout(() => {
+        //         schedulePushNotification();
+        //         setNotificationScheduled(true);
+        //       }, notificationTime.getTime() - today.getTime());
+        //     } else if (!eventNotified && today.getTime() >= eventStartTime.getTime()) {
+        //       // Notify about the event
+        //       clearTimeout(timerRef.current);
+        //       schedulePushNotification();
+        //       setEventNotified(true);
+        //     }
+        //   });
+        // };
+
+        if (today.getTime() < eventStartTime.getTime() - 10 * 60 * 1000) {
+          // Schedule first notification if it hasn't been scheduled yet
+          if (!event.notificationScheduled) {
+            event.notificationScheduled = true;
+            clearTimeout(timerRef.current);
+            timerRef.current = setTimeout(() => {
+              schedulePushNotification("Your meet will be in 10 minutes");
+            }, notificationTime.getTime() - today.getTime());
+          }
+        } else if (today.getTime() < eventStartTime.getTime() + 60000) {
+          // Schedule second notification if it hasn't been scheduled yet
+          if (!event.eventNotified) {
+            event.eventNotified = true;
+            clearTimeout(timerRef.current);
+            timerRef.current = setTimeout(() => {
+              schedulePushNotification("Join your meet now");
+            }, eventStartTime.getTime() - today.getTime());
+          }
+        } else {
+          // Event is over, reset notification flags
+          event.notificationScheduled = false;
+          event.eventNotified = false;
+        }
+      });
+    };
+
+    checkNotifications();
+
+    // Update every minute
+    const intervalId = setInterval(checkNotifications, 20000);
+
+    return () => {
+      clearInterval(intervalId);
+      clearTimeout(timerRef.current);
+    };
+  }, [testItems]);
 
   function rgb2hex(r, g, b) {
     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
@@ -101,9 +192,10 @@ const CalendarScreen = () => {
   };
 
   const loadItems = (day) => {
+    console.log(day);
     // setTestItems(addColors(testItems));
     setTimeout(() => {
-      for (let i = -15; i < 785; i++) {
+      for (let i = -115; i < 1785; i++) {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = timeToString(time);
 
@@ -196,7 +288,8 @@ const CalendarScreen = () => {
       <Agenda
         items={testItems}
         loadItemsForMonth={loadItems}
-        selected={"2022-07-07"}
+        selected={todayDate}
+        openDayScrollView={true}
         // refreshControl={null}
         // showClosingKnob={true}
         // refreshing={false}
@@ -214,16 +307,6 @@ const CalendarScreen = () => {
       />
       {!calendarOpen && (
         <TouchableOpacity style={styles.button} onPress={() => setVisible(true)}>
-          <Icon name="add-outline" size={50} />
-        </TouchableOpacity>
-      )}
-      {!calendarOpen && (
-        <TouchableOpacity
-          style={[styles.button, { right: "auto", left: "auto" }]}
-          onPress={async () => {
-            await schedulePushNotification();
-          }}
-        >
           <Icon name="add-outline" size={50} />
         </TouchableOpacity>
       )}

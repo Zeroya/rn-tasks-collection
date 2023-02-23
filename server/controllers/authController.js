@@ -51,4 +51,15 @@ const authLogin = async (req, res) => {
   }
 };
 
-export { authLogin, authRegister };
+const getAllRegisteredUsers = async (req, res) => {
+  try {
+    const users = await Users.find({}, { userName: 1, _id: 0 });
+    const userNames = users.map((user) => user.userName);
+    res.send(userNames);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
+
+export { authLogin, authRegister, getAllRegisteredUsers };

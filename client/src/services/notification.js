@@ -34,11 +34,11 @@ export async function registerForPushNotificationsAsync() {
   return token;
 }
 
-export async function schedulePushNotification() {
+export async function schedulePushNotification(title) {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "You've got mail! 📬",
-      body: "Here is the notification body",
+      title,
+      body: "Get ready for your meet",
       data: { data: "goes here" },
     },
     trigger: { seconds: 2 },

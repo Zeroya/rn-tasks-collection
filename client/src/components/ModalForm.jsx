@@ -1,9 +1,11 @@
 import { View, Text, TextInput, Pressable, StyleSheet, Modal, Button } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { BASE_URL } from "../constants/constants";
 
 const ModalForm = ({ setVisible, setItems, items }) => {
   const [formData, setFormData] = useState({ date: "", time: "", caller: "" });
+  const [allUsers, setAllUsers] = useState([]);
   //const [date, setDate] = useState("09-10-2021");
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -34,7 +36,7 @@ const ModalForm = ({ setVisible, setItems, items }) => {
     setDate(value);
     setDatePicker(false);
   }
-
+  console.log("allUsers", allUsers);
   function onTimeSelected(event, value) {
     setTime(value);
     setTimePicker(false);
@@ -45,11 +47,22 @@ const ModalForm = ({ setVisible, setItems, items }) => {
     setTime2Picker(false);
   }
 
+  useEffect(() => {
+    async function getAllUsers() {
+      const res = await fetch(BASE_URL + "/auth/allUsers");
+      const data = await res.json();
+      setAllUsers(data);
+      console.log("data", data);
+    }
+
+    getAllUsers();
+  }, []);
+
   const addNewEvent = () => {
     let key = dataWithFormat;
     setItems({
       ...items,
-      [key]: [...items[key], { time: dataTimeFormat }],
+      [key]: [...items[key], { time: dataTimeFormat, notificationScheduled: false, eventNotified: false }],
     });
   };
 
