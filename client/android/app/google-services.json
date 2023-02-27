@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "961213959913",
+    "project_id": "rnnotifications-a5597",
+    "storage_bucket": "rnnotifications-a5597.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961213959913:android:be245448b163e4a4a5ea78",
+        "android_client_info": {
+          "package_name": "come.withzeroya2.reactnativelist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961213959913-rpiqbnkuvce1t3drl4hnj4591s1cg12s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArenobZ03SELZ8s_epVjRm2lRAXdkWQnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961213959913-rpiqbnkuvce1t3drl4hnj4591s1cg12s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

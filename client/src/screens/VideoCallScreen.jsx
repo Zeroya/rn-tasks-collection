@@ -32,7 +32,7 @@ const VideoCallScreen = ({ navigation }) => {
       appId: "5746bfe42f0f4733ba87b71f30098468",
       channel: "ChatRN",
       token:
-        "007eJxTYNis9lZ2j4VC9PxZh9m3p3zRnOPLmXR7xfTE/Dt3nTgvvTFUYDA1NzFLSks1MUozSDMxNzZOSrQwTzI3TDM2MLC0MDGzcHR5ltwQyMgg/7GBmZEBAkF8NgbnjMSSID8GBgB2Fh9s",
+        "007eJxTYJgo0m0e9i1LpOyfwoqO3zp5n2I0djGq3ZiT1jtXV/ZBVq8CQ2KSRYqZZap5qmWqiYmFYaJlSnKigaWlWap5okFKiqGh5sofyQ2BjAwbWfJZGBkgEMRnY3DOSCwJ8mNgAABuvh+Z",
     },
     rtcCallbacks: {
       EndCall: () => setCallChecker(),
