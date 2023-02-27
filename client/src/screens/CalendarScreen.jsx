@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Card, Avatar } from "react-native-paper";
 import ModalForm from "../components/ModalForm";
 import { registerForPushNotificationsAsync, schedulePushNotification } from "../services/notification";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 
 const timeToString = (time) => {
@@ -15,37 +16,88 @@ const timeToString = (time) => {
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
+    shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
 
-const CalendarScreen = () => {
+const CalendarScreen = ({ navigation }) => {
   //const [color, setColor] = useState("");
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [user, setUser] = useState("");
   const [items, setItems] = useState({});
   const todayDate = new Date().toISOString().slice(0, 10);
   const [testItems, setTestItems] = useState({
-    "2023-02-11": [{ name: "heeiii 1111", time: "10:00 - 13:00", notificationScheduled: false, eventNotified: false }],
+    "2023-02-11": [
+      {
+        name: "heeiii 1111",
+        time: "10:00 - 13:00",
+        notificationScheduled: false,
+        eventNotified: false,
+        callTo: "asdfg",
+      },
+    ],
     "2023-02-12": [],
     "2023-02-13": [],
-    "2023-02-21": [{ name: "heeiii 2211", time: "15:00 - 17:00", notificationScheduled: false, eventNotified: false }],
+    "2023-02-21": [
+      {
+        name: "heeiii 2211",
+        time: "15:00 - 17:00",
+        notificationScheduled: false,
+        eventNotified: false,
+        callTo: "qwerty",
+      },
+    ],
     "2023-02-23": [],
     "2023-02-25": [
-      { name: "heeiii 3311", time: "8:00 - 10:00", notificationScheduled: false, eventNotified: false },
-      { name: "heeiii 3331", time: "12:00 - 14:00", notificationScheduled: false, eventNotified: false },
-      { name: "heeiii 3331", time: "18:00 - 22:00", notificationScheduled: false, eventNotified: false },
+      {
+        name: "heeiii 3311",
+        time: "8:00 - 10:00",
+        notificationScheduled: false,
+        eventNotified: false,
+        callTo: "asdfg",
+      },
+      {
+        name: "heeiii 3331",
+        time: "12:00 - 14:00",
+        notificationScheduled: false,
+        eventNotified: false,
+        callTo: "qwerty",
+      },
+      {
+        name: "heeiii 3331",
+        time: "18:00 - 22:00",
+        notificationScheduled: false,
+        eventNotified: false,
+        callTo: "asdfg",
+      },
     ],
   });
+
+  const filteredItems = Object.fromEntries(
+    Object.entries(testItems).map(([date, items]) => [date, items.filter((item) => item.callTo === user)])
+  );
 
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  const getUsername = async () => {
+    try {
+      const value = await AsyncStorage.getItem("username");
+      if (value !== null) {
+        setUser(value);
+      }
+    } catch (e) {
+      console.error("Error while loading username!");
+    }
+  };
+
   useEffect(() => {
     loadItems({ dateString: "2023-02-22", day: 22, month: 2, timestamp: 1677024000000, year: 2023 });
+    getUsername();
     registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
 
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
@@ -74,7 +126,7 @@ const CalendarScreen = () => {
         .toString()
         .padStart(2, "0")}`;
 
-      const todayEvents = testItems[todayStr] || [];
+      const todayEvents = filteredItems[todayStr] || [];
 
       todayEvents.forEach((event) => {
         const [startTimeStr, endTimeStr] = event.time.split(" - ");
@@ -234,7 +286,7 @@ const CalendarScreen = () => {
 
   const renderItem = (item) => {
     return (
-      <TouchableOpacity style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("VideoCall")}>
         <Card style={[styles.cardForm, { shadowColor: item.colorUser }]}>
           <Card.Content>
             <View style={styles.itemBody}>
@@ -251,7 +303,11 @@ const CalendarScreen = () => {
                   {/* <Text>{item.name}</Text> */}
                 </View>
               </View>
-              <Avatar.Text label="J" size={55} style={{ backgroundColor: "rgba(20, 129, 219, 0.9)" }} />
+              <Avatar.Text
+                label={item.callTo.slice(0, 1).toUpperCase()}
+                size={55}
+                style={{ backgroundColor: "rgba(20, 129, 219, 0.9)" }}
+              />
             </View>
           </Card.Content>
         </Card>
@@ -286,7 +342,7 @@ const CalendarScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Agenda
-        items={testItems}
+        items={filteredItems}
         loadItemsForMonth={loadItems}
         selected={todayDate}
         openDayScrollView={true}

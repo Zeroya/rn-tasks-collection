@@ -1,11 +1,13 @@
 import { View, Text, TextInput, Pressable, StyleSheet, Modal, Button } from "react-native";
 import React, { useState, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
 import { BASE_URL } from "../constants/constants";
 
 const ModalForm = ({ setVisible, setItems, items }) => {
   const [formData, setFormData] = useState({ date: "", time: "", caller: "" });
   const [allUsers, setAllUsers] = useState([]);
+  const [callName, setCallName] = useState("Unknown");
   //const [date, setDate] = useState("09-10-2021");
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -62,7 +64,10 @@ const ModalForm = ({ setVisible, setItems, items }) => {
     let key = dataWithFormat;
     setItems({
       ...items,
-      [key]: [...items[key], { time: dataTimeFormat, notificationScheduled: false, eventNotified: false }],
+      [key]: [
+        ...items[key],
+        { time: dataTimeFormat, notificationScheduled: false, eventNotified: false, callTo: callName },
+      ],
     });
   };
 
@@ -141,6 +146,19 @@ const ModalForm = ({ setVisible, setItems, items }) => {
                 </View>
               )}
             </View>
+            <View>
+              <Picker
+                selectedValue={callName}
+                onValueChange={(value, index) => setCallName(value)}
+                mode="dropdown" // Android only
+                style={styles.picker}
+              >
+                <Picker.Item label="Call to" value="Unknown" />
+                {allUsers?.map((user, index) => (
+                  <Picker.Item label={user} value={user} key={index} />
+                ))}
+              </Picker>
+            </View>
             {/* <TextInput
               style={styles.modalInput}
               placeholder="Time"
@@ -192,7 +210,7 @@ const styles = StyleSheet.create({
   },
   titleModal: {
     position: "absolute",
-    top: 50,
+    top: 30,
     fontSize: 20,
     textShadowColor: "red",
     textShadowRadius: 6,
