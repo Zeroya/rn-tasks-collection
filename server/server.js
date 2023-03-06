@@ -20,6 +20,7 @@ const io = new Server(httpServer, {
 
 const generateID = () => Math.random().toString(36).substring(2, 10);
 let chatRooms = [];
+let calendarEvents = [];
 let callInfo = { callName: "", checker: false };
 
 io.on("connection", (socket) => {
@@ -30,6 +31,12 @@ io.on("connection", (socket) => {
     socket.join(roomName);
     chatRooms.unshift({ id: generateID(), name: roomName, messages: [] });
     socket.emit("roomsList", chatRooms);
+  });
+
+  socket.on("createNewEvent", (event) => {
+    //socket.join("v1");
+    calendarEvents = [event];
+    socket.broadcast.emit("eventList", calendarEvents);
   });
 
   socket.on("callUserInfo", (info) => {
@@ -77,6 +84,10 @@ const PORT = process.env.PORT || 3003;
 
 app.get("/api", (req, res) => {
   res.json(chatRooms);
+});
+
+app.get("/events", (req, res) => {
+  res.json(calendarEvents);
 });
 
 app.use(express.json());

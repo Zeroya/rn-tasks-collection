@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, SafeAreaView, Button, Platform } from "react-native";
 import { Agenda } from "react-native-calendars";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Card, Avatar } from "react-native-paper";
 import ModalForm from "../components/ModalForm";
+import { BASE_URL } from "../constants/constants";
 import { registerForPushNotificationsAsync, schedulePushNotification } from "../services/notification";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import socket from "../utils/socket";
 import * as Notifications from "expo-notifications";
 
 const timeToString = (time) => {
@@ -28,7 +30,7 @@ const CalendarScreen = ({ navigation }) => {
   const [user, setUser] = useState("");
   const [items, setItems] = useState({});
   const todayDate = new Date().toISOString().slice(0, 10);
-  const [testItems, setTestItems] = useState({
+  const testArr = {
     "2023-02-11": [
       {
         name: "heeiii 1111",
@@ -73,10 +75,35 @@ const CalendarScreen = ({ navigation }) => {
         callTo: "asdfg",
       },
     ],
-  });
+  };
+  const [testItems, setTestItems] = useState({});
+
+  useLayoutEffect(() => {
+    function fetchEvents() {
+      fetch(BASE_URL + "/events")
+        .then((res) => res.json())
+        //  .then((data) => console.log("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFF", data))
+        .then((data) => {
+          if (data.length) {
+            setTestItems(...data);
+          } else {
+            setTestItems(testArr);
+          }
+        })
+        .catch((err) => console.error(err));
+    }
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    socket.on("eventList", (events) => {
+      console.log("looogggggggggg", events);
+      setTestItems(...events);
+    });
+  }, [socket, testItems]);
 
   const filteredItems = Object.fromEntries(
-    Object.entries(testItems).map(([date, items]) => [date, items.filter((item) => item.callTo === user)])
+    Object?.entries(testItems).map(([date, items]) => [date, items.filter((item) => item.callTo === user)])
   );
 
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -227,12 +254,12 @@ const CalendarScreen = ({ navigation }) => {
     // return updatedData;
   };
 
-  const addNewEvent = () => {
-    setTestItems({
-      ...testItems,
-      "2022-07-11": [...testItems["2022-07-11"], { time: "10:00 - 13:00" }],
-    });
-  };
+  // const addNewEvent = () => {
+  //   setTestItems({
+  //     ...testItems,
+  //     "2022-07-11": [...testItems["2022-07-11"], { time: "10:00 - 13:00" }],
+  //   });
+  // };
 
   const generateColor = () => {
     const k1 = 64;
