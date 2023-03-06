@@ -2,6 +2,7 @@ import { View, Text, TextInput, Pressable, StyleSheet, Modal, Button } from "rea
 import React, { useState, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
+import socket from "../utils/socket";
 import { BASE_URL } from "../constants/constants";
 
 const ModalForm = ({ setVisible, setItems, items }) => {
@@ -38,7 +39,9 @@ const ModalForm = ({ setVisible, setItems, items }) => {
     setDate(value);
     setDatePicker(false);
   }
+
   console.log("allUsers", allUsers);
+
   function onTimeSelected(event, value) {
     setTime(value);
     setTimePicker(false);
@@ -62,13 +65,20 @@ const ModalForm = ({ setVisible, setItems, items }) => {
 
   const addNewEvent = () => {
     let key = dataWithFormat;
-    setItems({
+    socket.emit("createNewEvent", {
       ...items,
       [key]: [
         ...items[key],
         { time: dataTimeFormat, notificationScheduled: false, eventNotified: false, callTo: callName },
       ],
     });
+    // setItems({
+    //   ...items,
+    //   [key]: [
+    //     ...items[key],
+    //     { time: dataTimeFormat, notificationScheduled: false, eventNotified: false, callTo: callName },
+    //   ],
+    // });
   };
 
   const closeModal = () => setVisible(false);
